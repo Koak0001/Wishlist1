@@ -21,4 +21,7 @@ public class Item {
             this.type = type;
         }
     }
+    public String getItemName() {return itemName;}
+    public String setItemName(String itemName) {return itemName;}
+
 }
