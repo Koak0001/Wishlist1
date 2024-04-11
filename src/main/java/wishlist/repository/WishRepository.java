@@ -23,6 +23,18 @@ public class WishRepository {
 
         allWishlists.add(list1);
 
+        ItemList list2 = new ItemList("Wishlist2");
+        list2.addItem(new Item("Playstation 5"));
+        list2.addItem(new Item("Skateboard"));
+        list2.addItem(new Item("Koncertbilleter"));
+        allWishlists.add(list2);
+
+        ItemList list3 = new ItemList("Wishlist3");
+        list3.addItem(new Item("Wellness Gavekort"));
+        list3.addItem(new Item("Gavekort Bog&Ide"));
+        list3.addItem(new Item("Sommerhus Ophold"));
+        allWishlists.add(list3);
+
 
     }
     public void addItemlist(ItemList itemList) {allWishlists.add(itemList);}
