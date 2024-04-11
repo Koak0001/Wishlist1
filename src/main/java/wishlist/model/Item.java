@@ -24,4 +24,8 @@ public class Item {
     public String getItemName() {return itemName;}
     public String setItemName(String itemName) {return itemName;}
 
+    @Override
+    public String toString() {
+        return itemName;
+    }
 }
