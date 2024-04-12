@@ -2,11 +2,43 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Wishlist</title>
 </head>
 <body>
-<div th:if="${itemlist != null}" th:each="item : ${itemlist.localList}">
-    <p th:text="${item.itemName}"></p>
+<h1>Wishlist: <span th:text="${itemlist.listName}"></span></h1>
+
+<!-- Success Message -->
+<div th:if="${successMessage}" class="alert alert-success" role="alert" style="margin-bottom: 10px;">
+    <span th:text="${successMessage}"></span>
 </div>
+
+<!-- Error Message -->
+<div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+    <span th:text="${errorMessage}"></span>
+</div>
+
+<!-- Add Item Form -->
+<form method="post" th:action="@{'/wishlist/' + ${itemlist.listName} + '/addItem'}">
+    <label for="itemName">Item Name:</label>
+    <input type="text" id="itemName" name="itemName"><br>
+    <br>
+    <label for="itemDescription">Item Description:</label>
+    <input type="text" id="itemDescription" name="itemDescription"><br>
+    <br>
+    <label for="itemPrice">Item Price:</label>
+    <input type="text" id="itemPrice" name="itemPrice"><br>
+    <br>
+    <button type="submit">Add Item</button>
+</form>
+
+<!-- Display Items -->
+<div th:if="${itemlist != null}" th:each="item : ${itemlist.localList}">
+    <p th:text="'Produkt: ' + ${item.itemName}"></p>
+    <p th:if="${item.itemDescription != null}" th:text="'Produkt beskrivelse: ' + ${item.itemDescription}"></p>
+    <p th:unless="${item.itemDescription != null}">Ingen beskrivelse for produktet</p>
+    <p th:text="'Pris: ' + ${item.itemPrice} + ' kr'"></p>
+    <br>
+</div>
+
 </body>
 </html>
