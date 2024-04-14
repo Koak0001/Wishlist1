@@ -28,4 +28,13 @@ public class ItemList {
     public String getListName() {
         return listName;
     }
+
+    public Item getItemByName(String name) {
+        for (Item item : localList) {
+            if (item.getItemName().equalsIgnoreCase(name)) {
+                return item;
+            }
+        }
+        throw new IllegalArgumentException("Item with name " + name + " not found");
+    }
 }
