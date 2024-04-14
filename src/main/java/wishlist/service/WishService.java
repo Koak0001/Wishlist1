@@ -16,9 +16,14 @@ public class WishService {
 
     //TODO Create methods here, for adding a new Itemlist to allWishlists, and for adding Items to an Itemlist.
 
-    //Read methods here TODO Include read method for Itemlist.
     public ItemList getItemListByName(String name) {return wishRepository.getItemListByName(name);}
+    public Item getItemByName(String name, ItemList list) {return wishRepository.getItemByName(name, list);}
 
     public List<ItemList> getWishLists() {return wishRepository.getAllWishlists();}
 
+    public void deleteItem(ItemList itemList, Item item) {itemList.removeItem(item);}
+
+    public boolean deleteItemList(String name) {
+        return wishRepository.deleteItemListByName(name);
+    }
 }

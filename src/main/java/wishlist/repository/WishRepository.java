@@ -37,7 +37,6 @@ public class WishRepository {
 
 
     }
-    public void addItemlist(ItemList itemList) {allWishlists.add(itemList);}
 
     public List<ItemList> getAllWishlists() {
         return allWishlists;
@@ -51,7 +50,19 @@ public class WishRepository {
         }
         throw new IllegalArgumentException("ItemList with name " + name + " not found");
     }
+   public Item getItemByName(String name, ItemList itemList)
+   {return itemList.getItemByName(name);}
 
+
+    public boolean deleteItemListByName(String name) {
+        for (ItemList itemList : allWishlists) {
+            if (itemList.getListName().equalsIgnoreCase(name)) {
+                allWishlists.remove(itemList);
+                return true;
+            }
+        }
+        return false;
+    }
 
 }
 

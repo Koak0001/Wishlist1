@@ -8,7 +8,11 @@
 <div th:each="itemList : ${lists}">
     <h2 th:text="${itemList.listName}"></h2>
     <a th:href="@{${itemList.listName}}" th:text="${itemList.listName}"></a>
+    <form th:action="@{'/wishlist/wishlists/delete/' + ${itemList.listName}}" method="post">
+        <button type="submit">Delete</button>
+    </form>
 </div>
+
 
 </body>
 </html>
