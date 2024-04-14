@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import wishlist.model.Item;
 import wishlist.model.ItemList;
-import wishlist.repository.WishRepository;
+import wishlist.model.WishlistForm;
 import wishlist.service.WishService;
 
 import java.util.List;
@@ -22,18 +22,30 @@ import java.util.List;
 public class WishController {
 
     private final WishService wishService;
-    private final WishRepository wishRepository;
 
     @Autowired
-    public WishController(WishService wishService, WishRepository wishRepository) {this.wishService = wishService;
-        this.wishRepository = wishRepository;
+    public WishController(WishService wishService) {
+        this.wishService = wishService;
     }
 
+    @GetMapping("create")
+    public String showCreateForm(Model model) {
+        model.addAttribute("wishlistForm", new WishlistForm());
+        return "create";
+    }
 
-@GetMapping("create")
-public String createList(Model model){return "create";}
+    @PostMapping("create")
+    public String createList(@ModelAttribute("wishlistForm") WishlistForm wishlistForm, RedirectAttributes redirectAttributes) {
+        try {
+            wishService.createWishlist(wishlistForm.getName());
+            return "redirect:/wishlist/wishlists";
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error creating wishlist: " + e.getMessage());
+            return "redirect:/wishlist/create";
+        }
+    }
 
-@GetMapping("wishlists")
+    @GetMapping("wishlists")
     public String getAll(Model model){
         List<ItemList> lists = wishService.getWishLists();
         model.addAttribute("lists", lists);
@@ -55,6 +67,9 @@ public String createList(Model model){return "create";}
             itemList.addItem(item);
             redirectAttributes.addFlashAttribute("successMessage", "Item added successfully.");
         } catch (IllegalArgumentException e) {
+
+            //TODO Handle errorMessage (Den viser kun default errorpage, hvor der står "This application has no explicit mapping for /error, so you are seeing this as a fallback" )
+
             redirectAttributes.addFlashAttribute("errorMessage", "Error adding item: " + e.getMessage());
         }
         return "redirect:/wishlist/" + listName;

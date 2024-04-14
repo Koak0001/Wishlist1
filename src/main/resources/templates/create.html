@@ -6,6 +6,30 @@
 </head>
 <body>
 <h1>Create a new Wishlist!</h1>
-<p>Options for adding/editing the list, and sharing it here!</p>
+
+<!-- Success Message -->
+<div th:if="${successMessage}" class="alert alert-success" role="alert">
+    <span th:text="${successMessage}"></span>
+</div>
+
+<!-- Error Message -->
+<div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+    <span th:text="${errorMessage}"></span>
+</div>
+
+<!-- Link to view wishlists -->
+<a th:href="@{/wishlist/wishlists}">View Wishlists</a><br>
+ <br>
+
+<!-- Form to create a new wishlist -->
+<form method="post" th:action="@{/wishlist/create}">
+    <div class="form-group">
+        <label for="name">Wishlist Name:</label>
+        <input type="text" id="name" name="name" class="form-control"><br>
+        <br>
+    </div>
+    <button type="submit" class="btn btn-success">Create Wishlist</button>
+</form>
+
 </body>
 </html>
