@@ -7,10 +7,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import wishlist.model.Item;
 import wishlist.model.ItemList;
 import wishlist.service.WishService;
 
 import java.util.List;
+
 
 @Controller
 @RequestMapping("wishlist")
@@ -37,9 +41,25 @@ public String createList(Model model){return "create";}
         model.addAttribute("itemlist", itemlist);
         return "itemlist";
     }
+    @PostMapping("/{listName}/addItem")
+    public String addItemToList(@PathVariable String listName, @RequestParam String itemName, @RequestParam String itemDescription, @RequestParam int itemPrice, RedirectAttributes redirectAttributes) {
+        try {
+            ItemList itemList = wishService.getItemListByName(listName);
+            Item item = new Item(itemName);
+            item.setItemDescription(itemDescription);
+            item.setItemPrice(itemPrice);
+            itemList.addItem(item);
+            redirectAttributes.addFlashAttribute("successMessage", "Item added successfully.");
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error adding item: " + e.getMessage());
+        }
+        return "redirect:/wishlist/" + listName;
+    }
     @PostMapping("wishlists/delete/{listName}")
     public String delete(@PathVariable String listName, Model model) {
         wishService.deleteItemList(listName);
         return "redirect:/wishlist/wishlists";
     }
+}
+
 }

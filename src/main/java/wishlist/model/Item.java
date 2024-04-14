@@ -21,9 +21,27 @@ public class Item {
             this.type = type;
         }
     }
-    public String getItemName() {return itemName;}
-    public String setItemName(String itemName) {return itemName;}
+    public String getItemName() {
+        return itemName;
+    }
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+    public String getItemDescription() {
+        return itemDescription;
+    }
 
+    public void setItemDescription(String itemDescription) {
+        this.itemDescription = itemDescription;
+    }
+
+    public int getItemPrice() {
+        return itemPrice;
+    }
+
+    public void setItemPrice(int itemPrice) {
+        this.itemPrice = itemPrice;
+    }
     @Override
     public String toString() {
         return itemName;
