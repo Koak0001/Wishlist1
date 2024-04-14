@@ -37,6 +37,9 @@
     <p th:if="${item.itemDescription != null}" th:text="'Produkt beskrivelse: ' + ${item.itemDescription}"></p>
     <p th:unless="${item.itemDescription != null}">Ingen beskrivelse for produktet</p>
     <p th:text="'Pris: ' + ${item.itemPrice} + ' kr'"></p>
+    <form th:action="@{'/wishlist/'+ ${itemlist.listName} +'/delete/' + ${item.itemName}}" method="post">
+        <button type="submit">Delete</button>
+    </form>
     <br>
 </div>
 

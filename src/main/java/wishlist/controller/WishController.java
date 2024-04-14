@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import wishlist.model.Item;
 import wishlist.model.ItemList;
+import wishlist.repository.WishRepository;
 import wishlist.service.WishService;
 
 import java.util.List;
@@ -21,9 +22,12 @@ import java.util.List;
 public class WishController {
 
     private final WishService wishService;
+    private final WishRepository wishRepository;
 
     @Autowired
-    public WishController(WishService wishService) {this.wishService = wishService;}
+    public WishController(WishService wishService, WishRepository wishRepository) {this.wishService = wishService;
+        this.wishRepository = wishRepository;
+    }
 
 
 @GetMapping("create")
@@ -55,6 +59,15 @@ public String createList(Model model){return "create";}
         }
         return "redirect:/wishlist/" + listName;
     }
+    @PostMapping("/{listName}/delete/{itemName}")
+    public String deleteItem(@PathVariable String listName, @PathVariable String itemName, Model model) {
+        ItemList itemlist = wishService.getItemListByName(listName);
+        Item item = wishService.getItemByName(itemName, itemlist);
+        wishService.deleteItem(itemlist, item);
+        model.addAttribute("itemlist", itemlist);
+        return "redirect:/wishlist/{listName}";
+    }
+
     @PostMapping("wishlists/delete/{listName}")
     public String delete(@PathVariable String listName, Model model) {
         wishService.deleteItemList(listName);
