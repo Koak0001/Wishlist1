@@ -37,6 +37,7 @@ public class WishRepository {
 
 
     }
+    public void addItemlist(ItemList itemList) {allWishlists.add(itemList);}
 
     public List<ItemList> getAllWishlists() {
         return allWishlists;
