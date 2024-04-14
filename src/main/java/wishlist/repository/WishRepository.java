@@ -52,6 +52,15 @@ public class WishRepository {
         throw new IllegalArgumentException("ItemList with name " + name + " not found");
     }
 
+    public boolean deleteItemListByName(String name) {
+        for (ItemList itemList : allWishlists) {
+            if (itemList.getListName().equalsIgnoreCase(name)) {
+                allWishlists.remove(itemList);
+                return true;
+            }
+        }
+        return false;
+    }
 
 }
 

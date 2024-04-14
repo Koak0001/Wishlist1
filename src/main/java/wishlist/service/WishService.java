@@ -21,4 +21,7 @@ public class WishService {
 
     public List<ItemList> getWishLists() {return wishRepository.getAllWishlists();}
 
+    public boolean deleteItemList(String name) {
+        return wishRepository.deleteItemListByName(name);
+    }
 }
