@@ -2,6 +2,7 @@ package wishlist.model;
 //TODO Cleanup redundant attributes.
 public class Item {
     private String itemName;
+    private int idItem;
     private String itemDescription;
     private int itemPrice;
     private boolean reserved;
@@ -24,26 +25,30 @@ public class Item {
     public String getItemName() {
         return itemName;
     }
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
+
     public String getItemDescription() {
         return itemDescription;
     }
 
-    public void setItemDescription(String itemDescription) {
-        this.itemDescription = itemDescription;
-    }
+
+    public int getIdItem() {return idItem;}
+
 
     public int getItemPrice() {
         return itemPrice;
     }
 
+    public void setItemDescription(String itemDescription) {
+        this.itemDescription = itemDescription;
+    }
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
     public void setItemPrice(int itemPrice) {
         this.itemPrice = itemPrice;
     }
-    @Override
-    public String toString() {
-        return itemName;
+    public void setIdItem(int idItem) {
+        this.idItem = idItem;
     }
+
 }

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add a Custom Item to the Wishlist</title>
+</head>
+<body>
+<!-- Add Item Form -->
+<h2>Add an item to <span th:text="${itemList.listName}"></span></h2>
+
+<form method="post" th:action="@{'/wishlist/' + ${itemList.idItemList} + '/addItem'}" th:object="${item}" >
+    <div class="form-group">
+        <label for="itemName">Item Name:</label>
+        <input type="text" th:field="*{itemName}" id="itemName">
+        <br>
+        <label for="itemDescription">Item Description:</label>
+        <textarea th:field="*{itemDescription}" id="itemDescription"></textarea>
+        <br>
+        <label for="itemPrice">Item Price:</label>
+        <input type="text" th:field="*{itemPrice}" id="itemPrice">
+    </div>
+    <button type="submit">Add Item!</button>
+</form>
+</body>
+</html>
