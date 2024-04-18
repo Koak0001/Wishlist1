@@ -30,4 +30,6 @@ public class WishService {
 
     public void deleteItemFromList(int idItemList, Item item) {wishRepository.deleteItemFromList(idItemList, item);}
 
+    public void deleteItemList(int idItemList) {wishRepository.deleteItemList(idItemList);}
+
 }

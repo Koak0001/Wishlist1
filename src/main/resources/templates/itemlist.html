@@ -19,18 +19,20 @@
 <a th:href="@{'/wishlist/' + ${itemList.idItemList} + '/addCustomItem'}">Add an item</a>
 <br>
 
-<!-- Display Items -->
 <div th:if="${items != null}" th:each="item : ${items}">
-    <p th:text="'Produkt: ' + ${item.itemName}"></p>
-    <p th:if="${item.itemDescription != null}" th:text="'Produkt beskrivelse: ' + ${item.itemDescription}"></p>
-    <p th:if="${item.itemDescription == null}">Ingen beskrivelse for produktet</p>
-    <p th:if="${item.itemPrice != null}" th:text="'Pris: ' + ${item.itemPrice} + ' kr'"></p>
-    <p th:if="${item.itemPrice == null}">Ingen pris tilgængelig</p>
-    <form th:action="@{'/wishlist/'+ ${itemList.IdItemList} +'/delete/' + ${item.idItem}}" method="post">
-        <button type="submit">Delete</button>
-    </form>
+    <p th:text="'Product: ' + ${item.itemName}"></p>
+    <p th:if="${item.itemDescription != null}" th:text="'Product description: ' + ${item.itemDescription}"></p>
+    <p th:if="${item.itemDescription == null}">No description available</p>
+    <p th:if="${item.itemPrice != null}" th:text="'Price: ' + ${item.itemPrice} + ' kr'"></p>
+    <p th:if="${item.itemPrice == null}">No price listed</p>
     <br>
+    <form th:action="@{'/wishlist/'+ ${itemList.IdItemList} +'/delete/' + ${item.idItem}}" method="post">
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?')">Delete</button>
+    </form>
 </div>
+
+
+
 
 
 </body>
