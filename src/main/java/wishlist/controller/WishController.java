@@ -63,12 +63,9 @@ public class WishController {
     @PostMapping("/{idItemList}/addItem")
     public String addItemToWishlist(@PathVariable int idItemList, @ModelAttribute("item") Item item){
         wishService.addItem(item, idItemList);
-        System.out.println(" id "+ item.getIdItem());
-        System.out.println(item.getItemName());
-        System.out.println(item.getItemDescription());
-        System.out.println(item.getItemPrice());
         return "redirect:/wishlist/" + idItemList;
     }
+
     @PostMapping("/{idItemList}/delete/{idItem}")
     public String deleteItem(@PathVariable int idItemList, @PathVariable int idItem, Model model) {
         Item item = wishService.getItemById(idItem, idItemList);
@@ -77,12 +74,15 @@ public class WishController {
         wishService.deleteItemFromList(idItemList, item);
         return "redirect:/wishlist/{idItemList}";
     }
-//
-//    @PostMapping("wishlists/delete/{listName}")
-//    public String delete(@PathVariable String listName, Model model) {
-//        wishService.deleteItemList(listName);
-//        return "redirect:/wishlist/wishlists";
-//    }
+
+    @PostMapping("wishlists/delete/{idItemList}")
+    public String delete(@PathVariable int idItemList, Model model) {
+        ItemList itemList = wishService.getItemList(idItemList);
+        model.addAttribute("idItemList", idItemList);
+        model.addAttribute("itemList", itemList);
+        wishService.deleteItemList(idItemList);
+        return "redirect:/wishlist/wishlists";
+    }
 }
 
 

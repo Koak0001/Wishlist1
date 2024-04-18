@@ -25,25 +25,28 @@
         <span th:text="${errorMessage}"></span>
     </div>
 
-    <!-- Link to view wishlists -->
     <div class="view-link">
         <a th:href="@{/wishlist/wishlists}" style=" font-weight: bold; color: cornflowerblue;">View all Wishlists</a>
     </div>
     <br>
-<!-- Form to create a new wishlist -->
- <form th:action="@{/wishlist/save}" th:object="${itemlist}" method="post">
-    <div class="form-group">
-        <label for="name">Wishlist Name:</label>
-        <input type="text" th:field="*{listName}" id="name" class="form-control">
-        <br>
+    <div class="container">
+        <form id="wishlistForm" th:action="@{/wishlist/save}" th:object="${itemlist}" method="post">
+            <div class="form-group">
+                <label for="name">Wishlist Name:</label>
+                <input type="text" th:field="*{listName}" id="name" class="form-control">
+                <br>
+                <button type="submit" class="btn btn-primary">Create List!</button>
+                <a href="/" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
     </div>
 </div>
-
+</body>
 <footer>
     <p>Contact Information:</p>
     <p>E-mail: support@Wishlist.com</p>
     <p>Tlf (Random). nr.: +45 45 16 18 67</p>
     <p>Management: Almer Toro Coskun & Kodjo Nicklas Akator </p>
 </footer>
-</body>
+
 </html>

@@ -182,6 +182,30 @@ public class WishRepository {
         return item;
     }
 
+    public void deleteItemList(int idItemList) {
+        try (Connection con = DriverManager.getConnection(dbUrl, dbUsername, dbPassword)) {
+            // Delete from ListJunction table
+            String junctionSql = "DELETE FROM ListJunction WHERE idItemList = ?";
+            PreparedStatement junctionPstmt = con.prepareStatement(junctionSql);
+            junctionPstmt.setInt(1, idItemList);
+            junctionPstmt.executeUpdate();
+            // Delete from Item table
+            String itemSql = "DELETE FROM Item WHERE idItem IN (SELECT idItem FROM ListJunction WHERE idItemList = ?)";
+            PreparedStatement itemPstmt = con.prepareStatement(itemSql);
+            itemPstmt.setInt(1, idItemList);
+            itemPstmt.executeUpdate();
+            // Delete from ItemList table
+            String itemListSql = "DELETE FROM ItemList WHERE idItemList = ?";
+            PreparedStatement itemListPstmt = con.prepareStatement(itemListSql);
+            itemListPstmt.setInt(1, idItemList);
+            itemListPstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error deleting item list");
+            e.printStackTrace();
+        }
+    }
+
+
 
     //TODO Delete list
     //TODO Edit item

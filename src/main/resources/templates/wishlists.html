@@ -16,13 +16,18 @@
     <h2 class="section-title">Your Wishlists:</h2>
     <div th:each="itemList : ${lists}" class="item-list">
         <h2 th:text="${itemList.listName}"></h2>
-        <a th:href="@{'/wishlist/' + ${itemList.getIdItemList()}}" class="wishlist-button">View Wishlist</a> <!-- Ændret til en knap -->
+        <a th:href="@{'/wishlist/' + ${itemList.idItemList}}" class="wishlist-button">View Wishlist</a>
         <br><br>
-        <form th:action="@{'/wishlist/wishlists/delete/' + ${itemList.listName}}" method="post">
-            <button type="submit">Delete</button><br>
+
+        <form th:action="@{'/wishlist/wishlists/delete/' + ${itemList.idItemList}}" method="post">
+            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this wishlist?')">Delete</button>
         </form>
     </div>
-    </div>
+</div>
+
+
+
+
 
 
 <footer>
