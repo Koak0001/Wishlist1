@@ -1,0 +1,70 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('images/Cloud-IMAGE.jpeg');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+    flex-direction: column;
+    margin-bottom: 5vh;
+}
+
+header {
+    background-color: #50bdf8;
+    color: #ffffff;
+    padding: 0.1px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 15px;
+}
+
+footer {
+    background-color: #40a0cf;
+    color: #ffffff;
+    text-align: center;
+    padding: 0px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.alert {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.view-link {
+    text-align: center;
+}
+
+label {
+    display: block;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+input {
+    display: block;
+    margin: 0 auto;
+}
+
+button {
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 10px; 
+}

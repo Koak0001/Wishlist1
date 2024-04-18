@@ -2,17 +2,41 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Front Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to True Dreams!</title>
+    <link rel="stylesheet" th:href="@{/styles.css}" /> <!-- Link til CSS-filen -->
+
 </head>
 <body>
-<h1>Wishlist Front Page</h1>
-<p>Stuff here for the wishlist</p>
+<header >
+    <h1>True Dreams</h1>
+    <p style="font-size: 1.0em; color: white; font-family: 'Lucida Calligraphy';  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); margin-left: 12px;">Making Dreams Come True</p>
+</header>
 
-<!-- Link to create a new wishlist -->
-<a th:href="@{/wishlist/create}">Create a new Wishlist</a> <br>
-<br>
-<!-- Link to view all wishlists -->
-<a th:href="@{'wishlist/wishlists'}">View All Wishlists</a> <br>
-<br>
+<section>
+    <h2 style="font-size: 1.5em; color: cornflowerblue;"> Create a new Wishlist </h2>
+    <ul>
+        <!-- Link to create a new wishlist -->
+        <a th:href="@{/wishlist/create}" style=" font-weight: bold; color: cornflowerblue;">New Wishlist</a> <br>
+        <br>
+    </ul>
+</section>
+
+<section>
+    <h2 style="font-size: 1.5em; color: cornflowerblue;">View all Wishlists</h2>
+    <ul>
+        <!-- Link to view all wishlists -->
+        <a th:href="@{'wishlist/wishlists'}" style=" font-weight: bold; color: cornflowerblue;">All Wishlists</a> <br>
+        <br>
+    </ul>
+</section>
+
+<footer>
+    <p>Contact Information:</p>
+    <p>E-mail: support@Wishlist.com</p>
+    <p>Tlf (Random). nr.: +45 45 16 18 67</p>
+    <p>Management: Almer Toro Coskun & Kodjo Nicklas Akator </p>
+</footer>
 </body>
 </html>
+

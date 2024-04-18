@@ -3,33 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <title>Create Wishlist</title>
+    <link rel="stylesheet" th:href="@{/create_styles.css}" /> <!-- Link til din nye CSS-fil -->
+
 </head>
 <body>
-<h1>Create a new Wishlist!</h1>
+<header>
+    <h1>True Dreams</h1>
+    <p style="font-size: 1.0em; color: white; font-family: 'Lucida Calligraphy';  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); margin-left: 12px;">Making Dreams Come True</p>
+</header>
 
-<!-- Success Message -->
-<div th:if="${successMessage}" class="alert alert-success" role="alert">
-    <span th:text="${successMessage}"></span>
-</div>
+<div class="container">
+    <h1 style="font-size: 1.7em; color: cornflowerblue;">Create a new Wishlist!</h1>
 
-<!-- Error Message -->
-<div th:if="${errorMessage}" class="alert alert-danger" role="alert">
-    <span th:text="${errorMessage}"></span>
-</div>
-
-<!-- Link to view wishlists -->
-<a th:href="@{/wishlist/wishlists}">View Wishlists</a><br>
- <br>
-
-<!-- Form to create a new wishlist -->
-<form method="post" th:action="@{/wishlist/create}">
-    <div class="form-group">
-        <label for="name">Wishlist Name:</label>
-        <input type="text" id="name" name="name" class="form-control"><br>
-        <br>
+    <!-- Success Message -->
+    <div th:if="${successMessage}" class="alert alert-success" role="alert">
+        <span th:text="${successMessage}"></span>
     </div>
-    <button type="submit" class="btn btn-success">Create Wishlist</button>
-</form>
 
+    <!-- Error Message -->
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+        <span th:text="${errorMessage}"></span>
+    </div>
+
+    <!-- Link to view wishlists -->
+    <div class="view-link">
+        <a th:href="@{/wishlist/wishlists}" style=" font-weight: bold; color: cornflowerblue;">View all Wishlists</a>
+    </div>
+    <br>
+
+    <!-- Form to create a new wishlist -->
+    <div class="form-container">
+        <form method="post" th:action="@{/wishlist/create}">
+            <div class="form-group">
+                <label for="name">Wishlist Name:</label>
+                <input type="text" id="name" name="name" class="form-control"><br>
+            </div>
+            <button type="submit" class="btn btn-success">Create Wishlist</button>
+        </form>
+    </div>
+</div>
+
+<footer>
+    <p>Contact Information:</p>
+    <p>E-mail: support@Wishlist.com</p>
+    <p>Tlf (Random). nr.: +45 45 16 18 67</p>
+    <p>Management: Almer Toro Coskun & Kodjo Nicklas Akator </p>
+</footer>
 </body>
 </html>

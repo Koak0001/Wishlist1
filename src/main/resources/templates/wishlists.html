@@ -3,16 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>Your Wishlists</title>
+    <link rel="stylesheet" th:href="@{/wishlists_styles.css}" /> <!-- Link til din nye CSS-fil -->
 </head>
 <body>
-<div th:each="itemList : ${lists}">
-    <h2 th:text="${itemList.listName}"></h2>
-    <a th:href="@{${itemList.listName}}" th:text="${itemList.listName}"></a>
-    <form th:action="@{'/wishlist/wishlists/delete/' + ${itemList.listName}}" method="post">
-        <button type="submit">Delete</button>
-    </form>
+<header>
+    <h1>True Dreams</h1>
+    <p style="font-size: 1.0em; color: white; font-family: 'Lucida Calligraphy';  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); margin-left: 12px;">Making Dreams Come True</p>
+</header>
+
+<div class="container">
+    <h2 class="section-title">Your Wishlists:</h2>
+    <div th:each="itemList : ${lists}" class="item-list">
+        <h2 th:text="${itemList.listName}"></h2>
+        <a th:href="@{${itemList.listName}}" class="wishlist-button">View Wishlist</a> <!-- Ændret til en knap -->
+        <br><br>
+        <form th:action="@{'/wishlist/wishlists/delete/' + ${itemList.listName}}" method="post">
+            <button type="submit">Delete</button><br>
+        </form>
+    </div>
 </div>
 
+<footer>
+    <p>Contact Information:</p>
+    <p>E-mail: support@Wishlist.com</p>
+    <p>Tlf (Random). nr.: +45 45 16 18 67</p>
+    <p>Management: Almer Toro Coskun & Kodjo Nicklas Akator </p>
+</footer>
 
 </body>
 </html>

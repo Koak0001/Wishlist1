@@ -51,7 +51,8 @@ public class WishRepository {
         }
         throw new IllegalArgumentException("ItemList with name " + name + " not found");
     }
-   public Item getItemByName(String name, ItemList itemList)
+
+    public Item getItemByName(String name, ItemList itemList)
    {return itemList.getItemByName(name);}
 
 
