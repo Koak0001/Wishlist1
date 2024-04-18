@@ -1,71 +1,144 @@
 package wishlist.repository;
 
-import org.springframework.http.converter.json.GsonBuilderUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import wishlist.model.Item;
 import wishlist.model.ItemList;
 
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class WishRepository {
-    private final List<ItemList> allWishlists;
-
-    public WishRepository() {
-        allWishlists = new ArrayList<>();
-
-        ItemList list1 = new ItemList("Wishlist1");
-
-        list1.addItem(new Item("Cykel"));
-        list1.addItem(new Item("AirPods"));
-        list1.addItem(new Item("Iphone 10"));
-
-        allWishlists.add(list1);
-
-        ItemList list2 = new ItemList("Wishlist2");
-        list2.addItem(new Item("Playstation 5"));
-        list2.addItem(new Item("Skateboard"));
-        list2.addItem(new Item("Koncertbilleter"));
-        allWishlists.add(list2);
-
-        ItemList list3 = new ItemList("Wishlist3");
-        list3.addItem(new Item("Wellness Gavekort"));
-        list3.addItem(new Item("Gavekort Bog&Ide"));
-        list3.addItem(new Item("Sommerhus Ophold"));
-        allWishlists.add(list3);
-
-
-    }
-    public void addItemlist(ItemList itemList) {allWishlists.add(itemList);}
+    @Value("${spring.datasource.url}")
+    String dbUrl;
+    @Value("${spring.datasource.username}")
+    String dbUsername;
+    @Value("${spring.datasource.password}")
+    String dbPassword;
 
     public List<ItemList> getAllWishlists() {
-        return allWishlists;
-    }
-
-    public ItemList getItemListByName(String name) {
-        for (ItemList itemList : allWishlists) {
-            if (itemList.getListName().equalsIgnoreCase(name)) {
-                return itemList;
+        List<ItemList> wishlists = new ArrayList<>();
+        try (Connection con = DriverManager.getConnection(dbUrl, dbUsername, dbPassword)) {
+            String sql = "SELECT idItemList, ListName FROM ItemList";
+            PreparedStatement psts = con.prepareStatement(sql);
+            ResultSet resultSet = psts.executeQuery();
+            while (resultSet.next()) {
+                int idItemList = resultSet.getInt("idItemList");
+                String listName = resultSet.getString("ListName");
+                ItemList newItemList = new ItemList(listName);
+                newItemList.setIdItemList(idItemList);
+                wishlists.add(newItemList);
             }
+        } catch (SQLException e) {
+            System.out.println("Database not connected");
+            e.printStackTrace();
         }
-        throw new IllegalArgumentException("ItemList with name " + name + " not found");
+        return wishlists;
     }
 
-    public Item getItemByName(String name, ItemList itemList)
-   {return itemList.getItemByName(name);}
+    public List<Item> getItemsInList(int idItemList) {
+        List<Item> items = new ArrayList<>();
+        try (Connection con = DriverManager.getConnection(dbUrl, dbUsername, dbPassword)) {
+            String sql = "SELECT i.idItem, i.ItemName, i.ItemDescription, i.ItemPrice " +
+                    "FROM Item i " +
+                    "JOIN ListJunction lj ON i.idItem = lj.idItem " +
+                    "WHERE lj.idItemList = ?";
+            PreparedStatement psts = con.prepareStatement(sql);
+            psts.setInt(1, idItemList);
+            ResultSet resultSet = psts.executeQuery();
+            while (resultSet.next()) {
+                int idItem = resultSet.getInt("idItem");
+                String itemName = resultSet.getString("ItemName");
+                String itemDescription = resultSet.getString("ItemDescription");
+                int itemPrice = resultSet.getInt("ItemPrice");
+                //setting the items in the list
+                Item item = new Item(itemName);
+                item.setIdItem(idItem);
+                item.setItemDescription(itemDescription);
+                item.setItemPrice(itemPrice);
 
-
-    public boolean deleteItemListByName(String name) {
-        for (ItemList itemList : allWishlists) {
-            if (itemList.getListName().equalsIgnoreCase(name)) {
-                allWishlists.remove(itemList);
-                return true;
+                items.add(item);
             }
+        } catch (SQLException e) {
+            System.out.println("Items not located");
+            e.printStackTrace();
         }
-        return false;
+        return items;
     }
 
+    public ItemList getItemListDetails(int idItemList) {
+        ItemList itemList = null;
+        try (Connection con = DriverManager.getConnection(dbUrl, dbUsername, dbPassword)) {
+            String sql = "SELECT * FROM ItemList WHERE idItemList = ?";
+            PreparedStatement psts = con.prepareStatement(sql);
+            psts.setInt(1, idItemList);
+            ResultSet resultSet = psts.executeQuery();
+            if (resultSet.next()) {
+                String listName = resultSet.getString("ListName");
+                itemList = new ItemList(listName);
+                itemList.setIdItemList(idItemList);
+            }
+        } catch (SQLException e) {
+            System.out.println("ItemList not located");
+            e.printStackTrace();
+        }
+        return itemList;
+    }
+
+
+    public void addNewItemList(ItemList newItemList) {
+        try (Connection con = DriverManager.getConnection(dbUrl, dbUsername, dbPassword)) {
+            String sql = "INSERT INTO ItemList (ListName) VALUES (?)";
+            PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            pstmt.setString(1, newItemList.getListName());
+            pstmt.executeUpdate();
+
+            ResultSet rs = pstmt.getGeneratedKeys();
+            if (rs.next()) {
+                int idItemList = rs.getInt(1);
+                newItemList.setIdItemList(idItemList);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error adding new ItemList");
+            e.printStackTrace();
+        }
+    }
+
+    public void addItem(Item item, int idItemList) {
+        try (Connection con = DriverManager.getConnection(dbUrl, dbUsername, dbPassword)) {
+            String itemSql = "INSERT INTO Item (ItemName, ItemDescription, ItemPrice) VALUES (?, ?, ?)";
+            PreparedStatement itemPstmt = con.prepareStatement(itemSql, Statement.RETURN_GENERATED_KEYS);
+            itemPstmt.setString(1, item.getItemName());
+            itemPstmt.setString(2, item.getItemDescription());
+            itemPstmt.setInt(3, item.getItemPrice());
+            itemPstmt.executeUpdate();
+
+            // Retrieving keys
+            ResultSet itemRs = itemPstmt.getGeneratedKeys();
+            int idItem = -1;
+            if (itemRs.next()) {
+                idItem = itemRs.getInt(1);
+                item.setIdItem(idItem);
+            //Debug line - System.out.println("Item ID: " + idItem);
+            }
+            String junctionSql = "INSERT INTO ListJunction (idItemList, idItem) VALUES (?, ?)";
+            PreparedStatement junctionPstmt = con.prepareStatement(junctionSql);
+            junctionPstmt.setInt(1, idItemList);
+            junctionPstmt.setInt(2, item.getIdItem()); // Use the retrieved idItem
+            junctionPstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println("Error adding new item to the wishlist");
+            e.printStackTrace();
+        }
+    }
+
+    //TODO Delete list
+    //TODO View item
+    //TODO Delete item
+    //TODO Edit item
 }
 
 

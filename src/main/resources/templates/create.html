@@ -30,16 +30,12 @@
         <a th:href="@{/wishlist/wishlists}" style=" font-weight: bold; color: cornflowerblue;">View all Wishlists</a>
     </div>
     <br>
-
-    <!-- Form to create a new wishlist -->
-    <div class="form-container">
-        <form method="post" th:action="@{/wishlist/create}">
-            <div class="form-group">
-                <label for="name">Wishlist Name:</label>
-                <input type="text" id="name" name="name" class="form-control"><br>
-            </div>
-            <button type="submit" class="btn btn-success">Create Wishlist</button>
-        </form>
+<!-- Form to create a new wishlist -->
+ <form th:action="@{/wishlist/save}" th:object="${itemlist}" method="post">
+    <div class="form-group">
+        <label for="name">Wishlist Name:</label>
+        <input type="text" th:field="*{listName}" id="name" class="form-control">
+        <br>
     </div>
 </div>
 

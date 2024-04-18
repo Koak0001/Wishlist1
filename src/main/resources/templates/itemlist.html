@@ -5,7 +5,7 @@
     <title>Wishlist</title>
 </head>
 <body>
-<h1>Wishlist: <span th:text="${itemlist.listName}"></span></h1>
+<h1>Wishlist: <span th:text="${itemList.listName}"></span></h1>
 
 <!-- Success Message -->
 <div th:if="${successMessage}" class="alert alert-success" role="alert" style="margin-bottom: 10px;">
@@ -16,33 +16,22 @@
 <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
     <span th:text="${errorMessage}"></span>
 </div>
-
-<!-- Add Item Form -->
-<form method="post" th:action="@{'/wishlist/' + ${itemlist.listName} + '/addItem'}">
-    <label for="itemName">Item Name:</label>
-    <input type="text" id="itemName" name="itemName"><br>
-    <br>
-    <label for="itemDescription">Item Description:</label>
-    <input type="text" id="itemDescription" name="itemDescription"><br>
-    <br>
-    <label for="itemPrice">Item Price:</label>
-    <input type="text" id="itemPrice" name="itemPrice"><br>
-    <br>
-    <button type="submit">Add Item</button>
-</form>
+<a th:href="@{'/wishlist/' + ${itemList.idItemList} + '/addCustomItem'}">Add an item</a>
 <br>
 
 <!-- Display Items -->
-<div th:if="${itemlist != null}" th:each="item : ${itemlist.localList}">
+<div th:if="${items != null}" th:each="item : ${items}">
     <p th:text="'Produkt: ' + ${item.itemName}"></p>
     <p th:if="${item.itemDescription != null}" th:text="'Produkt beskrivelse: ' + ${item.itemDescription}"></p>
-    <p th:unless="${item.itemDescription != null}">Ingen beskrivelse for produktet</p>
-    <p th:text="'Pris: ' + ${item.itemPrice} + ' kr'"></p>
-    <form th:action="@{'/wishlist/'+ ${itemlist.listName} +'/delete/' + ${item.itemName}}" method="post">
+    <p th:if="${item.itemDescription == null}">Ingen beskrivelse for produktet</p>
+    <p th:if="${item.itemPrice != null}" th:text="'Pris: ' + ${item.itemPrice} + ' kr'"></p>
+    <p th:if="${item.itemPrice == null}">Ingen pris tilgængelig</p>
+    <form th:action="@{'/wishlist/'+ ${itemList.listName} +'/delete/' + ${item.itemName}}" method="post">
         <button type="submit">Delete</button>
     </form>
     <br>
 </div>
+
 
 </body>
 </html>
