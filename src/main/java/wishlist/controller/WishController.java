@@ -69,14 +69,14 @@ public class WishController {
         System.out.println(item.getItemPrice());
         return "redirect:/wishlist/" + idItemList;
     }
-//    @PostMapping("/{listName}/delete/{itemName}")
-//    public String deleteItem(@PathVariable String listName, @PathVariable String itemName, Model model) {
-//        ItemList itemlist = wishService.getItemListByName(listName);
-//        Item item = wishService.getItemByName(itemName, itemlist);
-//        wishService.deleteItem(itemlist, item);
-//        model.addAttribute("itemlist", itemlist);
-//        return "redirect:/wishlist/{listName}";
-//    }
+    @PostMapping("/{idItemList}/delete/{idItem}")
+    public String deleteItem(@PathVariable int idItemList, @PathVariable int idItem, Model model) {
+        Item item = wishService.getItemById(idItem, idItemList);
+        model.addAttribute("idItemList", idItemList);
+        model.addAttribute("item", item);
+        wishService.deleteItemFromList(idItemList, item);
+        return "redirect:/wishlist/{idItemList}";
+    }
 //
 //    @PostMapping("wishlists/delete/{listName}")
 //    public String delete(@PathVariable String listName, Model model) {

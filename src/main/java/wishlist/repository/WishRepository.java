@@ -121,7 +121,7 @@ public class WishRepository {
             if (itemRs.next()) {
                 idItem = itemRs.getInt(1);
                 item.setIdItem(idItem);
-            //Debug line - System.out.println("Item ID: " + idItem);
+                //Debug line - System.out.println("Item ID: " + idItem);
             }
             String junctionSql = "INSERT INTO ListJunction (idItemList, idItem) VALUES (?, ?)";
             PreparedStatement junctionPstmt = con.prepareStatement(junctionSql);
@@ -135,9 +135,55 @@ public class WishRepository {
         }
     }
 
+    public void deleteItemFromList(int idItemList, Item itemToDelete) {
+        try (Connection con = DriverManager.getConnection(dbUrl, dbUsername, dbPassword)) {
+            // Delete from ListJunction table
+            String junctionSql = "DELETE FROM ListJunction WHERE idItemList = ? AND idItem = ?";
+            PreparedStatement junctionPstmt = con.prepareStatement(junctionSql);
+            junctionPstmt.setInt(1, idItemList);
+            junctionPstmt.setInt(2, itemToDelete.getIdItem());
+            junctionPstmt.executeUpdate();
+
+            String itemSql = "DELETE FROM Item WHERE idItem = ?";
+            PreparedStatement itemPstmt = con.prepareStatement(itemSql);
+            itemPstmt.setInt(1, itemToDelete.getIdItem());
+            itemPstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error deleting item from the wishlist");
+            e.printStackTrace();
+        }
+    }
+
+    public Item getItemById(int idItem, int idItemList) {
+        Item item = null;
+        try (Connection con = DriverManager.getConnection(dbUrl, dbUsername, dbPassword)) {
+            String sql = "SELECT i.ItemName, i.ItemDescription, i.ItemPrice " +
+                    "FROM Item i " +
+                    "JOIN ListJunction lj ON i.idItem = lj.idItem " +
+                    "WHERE lj.idItemList = ? AND i.idItem = ?";
+            PreparedStatement psts = con.prepareStatement(sql);
+            psts.setInt(1, idItemList);
+            psts.setInt(2, idItem);
+            ResultSet resultSet = psts.executeQuery();
+            if (resultSet.next()) {
+                String itemName = resultSet.getString("ItemName");
+                String itemDescription = resultSet.getString("ItemDescription");
+                int itemPrice = resultSet.getInt("ItemPrice");
+                // Create the Item object with the retrieved data
+                item = new Item(itemName);
+                item.setIdItem(idItem);
+                item.setItemDescription(itemDescription);
+                item.setItemPrice(itemPrice);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error locating item");
+            e.printStackTrace();
+        }
+        return item;
+    }
+
+
     //TODO Delete list
-    //TODO View item
-    //TODO Delete item
     //TODO Edit item
 }
 
