@@ -25,14 +25,11 @@ public class WishRepository {
             PreparedStatement psts = con.prepareStatement(sql);
             ResultSet resultSet = psts.executeQuery();
             while (resultSet.next()) {
-
                 int idItemList = resultSet.getInt("idItemList");
                 String listName = resultSet.getString("ListName");
-                ItemList newItemList = new ItemList(listName); // Create ItemList without idItemList
-
-                newItemList.setIdItemList(idItemList); // Set idItemList separately
+                ItemList newItemList = new ItemList(listName);
+                newItemList.setIdItemList(idItemList);
                 wishlists.add(newItemList);
-
             }
         } catch (SQLException e) {
             System.out.println("Database not connected");
@@ -41,10 +38,11 @@ public class WishRepository {
         return wishlists;
     }
 
-    public List<Item> getItemList(int idItemList) {
+    public List<Item> getItemsInList(int idItemList) {
         List<Item> items = new ArrayList<>();
         try (Connection con = DriverManager.getConnection(dbUrl, dbUsername, dbPassword)) {
-            String sql = "SELECT i.idItem, i.ItemName FROM Item i " +
+            String sql = "SELECT i.idItem, i.ItemName, i.ItemDescription, i.ItemPrice " +
+                    "FROM Item i " +
                     "JOIN ListJunction lj ON i.idItem = lj.idItem " +
                     "WHERE lj.idItemList = ?";
             PreparedStatement psts = con.prepareStatement(sql);
@@ -53,10 +51,13 @@ public class WishRepository {
             while (resultSet.next()) {
                 int idItem = resultSet.getInt("idItem");
                 String itemName = resultSet.getString("ItemName");
-//                String itemDescription = resultSet.getString("ItemDescription");
-//                int itemPrice = resultSet.getInt("ItemPrice");
-
+                String itemDescription = resultSet.getString("ItemDescription");
+                int itemPrice = resultSet.getInt("ItemPrice");
+                //setting the items in the list
                 Item item = new Item(itemName);
+                item.setIdItem(idItem);
+                item.setItemDescription(itemDescription);
+                item.setItemPrice(itemPrice);
 
                 items.add(item);
             }
@@ -66,6 +67,7 @@ public class WishRepository {
         }
         return items;
     }
+
     public ItemList getItemListDetails(int idItemList) {
         ItemList itemList = null;
         try (Connection con = DriverManager.getConnection(dbUrl, dbUsername, dbPassword)) {
@@ -84,6 +86,7 @@ public class WishRepository {
         }
         return itemList;
     }
+
     public void addNewItemList(ItemList newItemList) {
         try (Connection con = DriverManager.getConnection(dbUrl, dbUsername, dbPassword)) {
             String sql = "INSERT INTO ItemList (ListName) VALUES (?)";
@@ -101,9 +104,9 @@ public class WishRepository {
             e.printStackTrace();
         }
     }
+
     public void addItem(Item item, int idItemList) {
         try (Connection con = DriverManager.getConnection(dbUrl, dbUsername, dbPassword)) {
-            // Insert the item into the Item table
             String itemSql = "INSERT INTO Item (ItemName, ItemDescription, ItemPrice) VALUES (?, ?, ?)";
             PreparedStatement itemPstmt = con.prepareStatement(itemSql, Statement.RETURN_GENERATED_KEYS);
             itemPstmt.setString(1, item.getItemName());
@@ -111,17 +114,14 @@ public class WishRepository {
             itemPstmt.setInt(3, item.getItemPrice());
             itemPstmt.executeUpdate();
 
-            // Retrieve keys
+            // Retrieving keys
             ResultSet itemRs = itemPstmt.getGeneratedKeys();
             int idItem = -1;
             if (itemRs.next()) {
                 idItem = itemRs.getInt(1);
-
                 item.setIdItem(idItem);
-                System.out.println("Item ID: " + idItem);
+            //Debug line - System.out.println("Item ID: " + idItem);
             }
-
-            // Insert into ListJunction
             String junctionSql = "INSERT INTO ListJunction (idItemList, idItem) VALUES (?, ?)";
             PreparedStatement junctionPstmt = con.prepareStatement(junctionSql);
             junctionPstmt.setInt(1, idItemList);
@@ -134,12 +134,6 @@ public class WishRepository {
         }
     }
 
-
-
-
-
-
-    //TODO Add Item to list
     //TODO Delete list
     //TODO View item
     //TODO Delete item

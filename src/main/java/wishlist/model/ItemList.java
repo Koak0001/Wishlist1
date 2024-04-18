@@ -13,14 +13,10 @@ public class ItemList {
     public void setListName(String listName) {
         this.listName = listName;
     }
-
     public String getListName() {
         return listName;
     }
-
     public void setIdItemList(int idItemList) {
         this.idItemList = idItemList;
     }
-
-
 }

@@ -69,9 +69,6 @@ public class WishController {
         System.out.println(item.getItemPrice());
         return "redirect:/wishlist/" + idItemList;
     }
-
-
-
 //    @PostMapping("/{listName}/delete/{itemName}")
 //    public String deleteItem(@PathVariable String listName, @PathVariable String itemName, Model model) {
 //        ItemList itemlist = wishService.getItemListByName(listName);
