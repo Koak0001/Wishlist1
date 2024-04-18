@@ -10,7 +10,7 @@ class WishServiceTest {
 
     @Test
     void testAddItemList() {
-        // Arrange
+
         WishRepository mockRepository = Mockito.mock(WishRepository.class);
         WishService wishService = new WishService(mockRepository);
         ItemList itemList = new ItemList("Test ItemList");
