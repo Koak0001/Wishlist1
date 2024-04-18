@@ -8,15 +8,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import wishlist.model.Item;
 import wishlist.model.ItemList;
-import wishlist.model.WishlistForm;
 import wishlist.service.WishService;
-
 import java.util.List;
-
-
 @Controller
 @RequestMapping("wishlist")
 public class WishController {
@@ -24,26 +19,7 @@ public class WishController {
     private final WishService wishService;
 
     @Autowired
-    public WishController(WishService wishService) {
-        this.wishService = wishService;
-    }
-
-    @GetMapping("create")
-    public String showCreateForm(Model model) {
-        model.addAttribute("wishlistForm", new WishlistForm());
-        return "create";
-    }
-
-    @PostMapping("create")
-    public String createList(@ModelAttribute("wishlistForm") WishlistForm wishlistForm, RedirectAttributes redirectAttributes) {
-        try {
-            wishService.createWishlist(wishlistForm.getName());
-            return "redirect:/wishlist/wishlists";
-        } catch (IllegalArgumentException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Error creating wishlist: " + e.getMessage());
-            return "redirect:/wishlist/create";
-        }
-    }
+    public WishController(WishService wishService) {this.wishService = wishService;}
 
     @GetMapping("wishlists")
     public String getAll(Model model){
@@ -51,43 +27,62 @@ public class WishController {
         model.addAttribute("lists", lists);
         return "wishlists";}
 
-@GetMapping("/{listName}")
-    public String showList(@PathVariable String listName, Model model) {
-        ItemList itemlist = wishService.getItemListByName(listName);
-        model.addAttribute("itemlist", itemlist);
+    @GetMapping("/{idItemList}")
+    public String itemListPage(@PathVariable int idItemList, Model model) {
+        List<Item> items = wishService.getItemListById(idItemList);
+        ItemList itemList = wishService.getItemList(idItemList);
+        model.addAttribute("items", items);
+        model.addAttribute("itemList", itemList);
         return "itemlist";
     }
-    @PostMapping("/{listName}/addItem")
-    public String addItemToList(@PathVariable String listName, @RequestParam String itemName, @RequestParam String itemDescription, @RequestParam int itemPrice, RedirectAttributes redirectAttributes) {
-        try {
-            ItemList itemList = wishService.getItemListByName(listName);
-            Item item = new Item(itemName);
-            item.setItemDescription(itemDescription);
-            item.setItemPrice(itemPrice);
-            itemList.addItem(item);
-            redirectAttributes.addFlashAttribute("successMessage", "Item added successfully.");
-        } catch (IllegalArgumentException e) {
-
-            //TODO Handle errorMessage (Den viser kun default errorpage, hvor der står "This application has no explicit mapping for /error, so you are seeing this as a fallback" )
-
-            redirectAttributes.addFlashAttribute("errorMessage", "Error adding item: " + e.getMessage());
-        }
-        return "redirect:/wishlist/" + listName;
-    }
-    @PostMapping("/{listName}/delete/{itemName}")
-    public String deleteItem(@PathVariable String listName, @PathVariable String itemName, Model model) {
-        ItemList itemlist = wishService.getItemListByName(listName);
-        Item item = wishService.getItemByName(itemName, itemlist);
-        wishService.deleteItem(itemlist, item);
-        model.addAttribute("itemlist", itemlist);
-        return "redirect:/wishlist/{listName}";
+    @GetMapping("/create")
+    public String showCreateWishlistForm(Model model) {
+        ItemList newItemList = new ItemList("");
+        model.addAttribute("itemlist", newItemList);
+        return "create";
     }
 
-    @PostMapping("wishlists/delete/{listName}")
-    public String delete(@PathVariable String listName, Model model) {
-        wishService.deleteItemList(listName);
+    @PostMapping("/save")
+    public String saveWishlist(@ModelAttribute("itemlist") ItemList itemList) {
+        wishService.addItemList(itemList);
         return "redirect:/wishlist/wishlists";
     }
+
+    @GetMapping("/{idItemList}/addCustomItem")
+    public String showAddCustomItemForm(@PathVariable int idItemList, Model model) {
+        Item newItem = new Item("");
+        ItemList itemList = wishService.getItemList(idItemList);
+        int idItem = newItem.getIdItem();
+        model.addAttribute("item", newItem);
+        model.addAttribute("idItem", idItem);
+        model.addAttribute("itemList", itemList);
+        return "addCustomItem";
+
+    }
+
+    @PostMapping("/{idItemList}/addItem")
+    public String addItemToWishlist(@PathVariable int idItemList, @ModelAttribute("item") Item item){
+        wishService.addItem(item, idItemList);
+        System.out.println(" id "+ item.getIdItem());
+        System.out.println(item.getItemName());
+        System.out.println(item.getItemDescription());
+        System.out.println(item.getItemPrice());
+        return "redirect:/wishlist/" + idItemList;
+    }
+//    @PostMapping("/{listName}/delete/{itemName}")
+//    public String deleteItem(@PathVariable String listName, @PathVariable String itemName, Model model) {
+//        ItemList itemlist = wishService.getItemListByName(listName);
+//        Item item = wishService.getItemByName(itemName, itemlist);
+//        wishService.deleteItem(itemlist, item);
+//        model.addAttribute("itemlist", itemlist);
+//        return "redirect:/wishlist/{listName}";
+//    }
+//
+//    @PostMapping("wishlists/delete/{listName}")
+//    public String delete(@PathVariable String listName, Model model) {
+//        wishService.deleteItemList(listName);
+//        return "redirect:/wishlist/wishlists";
+//    }
 }
 
 

@@ -22,10 +22,10 @@
  <br>
 
 <!-- Form to create a new wishlist -->
-<form method="post" th:action="@{/wishlist/create}">
+ <form th:action="@{/wishlist/save}" th:object="${itemlist}" method="post">
     <div class="form-group">
         <label for="name">Wishlist Name:</label>
-        <input type="text" id="name" name="name" class="form-control"><br>
+        <input type="text" th:field="*{listName}" id="name" class="form-control">
         <br>
     </div>
     <button type="submit" class="btn btn-success">Create Wishlist</button>
