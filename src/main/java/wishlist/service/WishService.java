@@ -26,4 +26,8 @@ public class WishService {
 
     public ItemList getItemList(int idItemList) {return wishRepository.getItemListDetails(idItemList);}
 
+    public Item getItemById(int idItem, int idItemList) {return wishRepository.getItemById(idItem, idItemList);}
+
+    public void deleteItemFromList(int idItemList, Item item) {wishRepository.deleteItemFromList(idItemList, item);}
+
 }
