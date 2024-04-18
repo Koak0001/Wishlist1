@@ -1,0 +1,47 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('images/MakeWish5-IMAGE.jpeg');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+header {
+    background-color: #50bdf8;
+    color: #ffffff;
+    padding: 0.1px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 15px;
+}
+
+section {
+    margin: 20px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 9px;
+}
+
+li a {
+    font-size: 23px;
+    color: #fafafa;
+}
+
+footer {
+    background-color: #40a0cf;
+    color: #ffffff;
+    text-align: center;
+    padding: 0px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}

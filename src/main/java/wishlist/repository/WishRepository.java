@@ -87,6 +87,7 @@ public class WishRepository {
         return itemList;
     }
 
+
     public void addNewItemList(ItemList newItemList) {
         try (Connection con = DriverManager.getConnection(dbUrl, dbUsername, dbPassword)) {
             String sql = "INSERT INTO ItemList (ListName) VALUES (?)";
