@@ -115,20 +115,17 @@ public class WishRepository {
             itemPstmt.setInt(3, item.getItemPrice());
             itemPstmt.executeUpdate();
 
-            // Retrieving keys
             ResultSet itemRs = itemPstmt.getGeneratedKeys();
             int idItem = -1;
             if (itemRs.next()) {
                 idItem = itemRs.getInt(1);
                 item.setIdItem(idItem);
-                //Debug line - System.out.println("Item ID: " + idItem);
             }
             String junctionSql = "INSERT INTO ListJunction (idItemList, idItem) VALUES (?, ?)";
             PreparedStatement junctionPstmt = con.prepareStatement(junctionSql);
             junctionPstmt.setInt(1, idItemList);
-            junctionPstmt.setInt(2, item.getIdItem()); // Use the retrieved idItem
+            junctionPstmt.setInt(2, item.getIdItem());
             junctionPstmt.executeUpdate();
-
         } catch (SQLException e) {
             System.out.println("Error adding new item to the wishlist");
             e.printStackTrace();
@@ -169,7 +166,7 @@ public class WishRepository {
                 String itemName = resultSet.getString("ItemName");
                 String itemDescription = resultSet.getString("ItemDescription");
                 int itemPrice = resultSet.getInt("ItemPrice");
-                // Create the Item object with the retrieved data
+                // Create Item object
                 item = new Item(itemName);
                 item.setIdItem(idItem);
                 item.setItemDescription(itemDescription);
@@ -204,11 +201,5 @@ public class WishRepository {
             e.printStackTrace();
         }
     }
-
-
-
-    //TODO Delete list
     //TODO Edit item
 }
-
-
