@@ -17,10 +17,13 @@ public class WishRepository {
     String dbUsername;
     @Value("${spring.datasource.password}")
     String dbPassword;
+    @Value("${spring.datasource.ssl-mode}")
+    String sslMode;
 
     public List<ItemList> getAllWishlists() {
         List<ItemList> wishlists = new ArrayList<>();
-        try (Connection con = DriverManager.getConnection(dbUrl, dbUsername, dbPassword)) {
+        try (Connection con = DriverManager.getConnection(dbUrl + "?sslMode=" + sslMode, dbUsername, dbPassword))
+        {
             String sql = "SELECT idItemList, ListName FROM ItemList";
             PreparedStatement psts = con.prepareStatement(sql);
             ResultSet resultSet = psts.executeQuery();
@@ -40,7 +43,8 @@ public class WishRepository {
 
     public List<Item> getItemsInList(int idItemList) {
         List<Item> items = new ArrayList<>();
-        try (Connection con = DriverManager.getConnection(dbUrl, dbUsername, dbPassword)) {
+        try (Connection con = DriverManager.getConnection(dbUrl + "?sslMode=" + sslMode, dbUsername, dbPassword))
+        {
             String sql = "SELECT i.idItem, i.ItemName, i.ItemDescription, i.ItemPrice " +
                     "FROM Item i " +
                     "JOIN ListJunction lj ON i.idItem = lj.idItem " +
@@ -70,7 +74,8 @@ public class WishRepository {
 
     public ItemList getItemListDetails(int idItemList) {
         ItemList itemList = null;
-        try (Connection con = DriverManager.getConnection(dbUrl, dbUsername, dbPassword)) {
+        try (Connection con = DriverManager.getConnection(dbUrl + "?sslMode=" + sslMode, dbUsername, dbPassword))
+        {
             String sql = "SELECT * FROM ItemList WHERE idItemList = ?";
             PreparedStatement psts = con.prepareStatement(sql);
             psts.setInt(1, idItemList);
@@ -89,7 +94,8 @@ public class WishRepository {
 
 
     public void addNewItemList(ItemList newItemList) {
-        try (Connection con = DriverManager.getConnection(dbUrl, dbUsername, dbPassword)) {
+        try (Connection con = DriverManager.getConnection(dbUrl + "?sslMode=" + sslMode, dbUsername, dbPassword))
+        {
             String sql = "INSERT INTO ItemList (ListName) VALUES (?)";
             PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, newItemList.getListName());
@@ -107,7 +113,8 @@ public class WishRepository {
     }
 
     public void addItem(Item item, int idItemList) {
-        try (Connection con = DriverManager.getConnection(dbUrl, dbUsername, dbPassword)) {
+        try (Connection con = DriverManager.getConnection(dbUrl + "?sslMode=" + sslMode, dbUsername, dbPassword))
+        {
             String itemSql = "INSERT INTO Item (ItemName, ItemDescription, ItemPrice) VALUES (?, ?, ?)";
             PreparedStatement itemPstmt = con.prepareStatement(itemSql, Statement.RETURN_GENERATED_KEYS);
             itemPstmt.setString(1, item.getItemName());
@@ -133,7 +140,8 @@ public class WishRepository {
     }
 
     public void deleteItemFromList(int idItemList, Item itemToDelete) {
-        try (Connection con = DriverManager.getConnection(dbUrl, dbUsername, dbPassword)) {
+        try (Connection con = DriverManager.getConnection(dbUrl + "?sslMode=" + sslMode, dbUsername, dbPassword))
+        {
             // Delete from ListJunction table
             String junctionSql = "DELETE FROM ListJunction WHERE idItemList = ? AND idItem = ?";
             PreparedStatement junctionPstmt = con.prepareStatement(junctionSql);
@@ -153,7 +161,8 @@ public class WishRepository {
 
     public Item getItemById(int idItem, int idItemList) {
         Item item = null;
-        try (Connection con = DriverManager.getConnection(dbUrl, dbUsername, dbPassword)) {
+        try (Connection con = DriverManager.getConnection(dbUrl + "?sslMode=" + sslMode, dbUsername, dbPassword))
+        {
             String sql = "SELECT i.ItemName, i.ItemDescription, i.ItemPrice " +
                     "FROM Item i " +
                     "JOIN ListJunction lj ON i.idItem = lj.idItem " +
@@ -180,7 +189,8 @@ public class WishRepository {
     }
 
     public void deleteItemList(int idItemList) {
-        try (Connection con = DriverManager.getConnection(dbUrl, dbUsername, dbPassword)) {
+        try (Connection con = DriverManager.getConnection(dbUrl + "?sslMode=" + sslMode, dbUsername, dbPassword))
+        {
             // Delete from ListJunction table
             String junctionSql = "DELETE FROM ListJunction WHERE idItemList = ?";
             PreparedStatement junctionPstmt = con.prepareStatement(junctionSql);
