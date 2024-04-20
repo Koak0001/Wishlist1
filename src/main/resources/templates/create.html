@@ -9,7 +9,7 @@
 <body>
 <header>
     <h1>True Dreams</h1>
-    <p style="font-size: 1.0em; color: white; font-family: 'Lucida Calligraphy';  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); margin-left: 12px;">Making Dreams Come True</p>
+    <p style="font-size: 1.0em; color: white; font-family: 'Lucida Calligraphy',serif;  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); margin-left: 12px;">Making Dreams Come True</p>
 </header>
 
 <div class="container">
@@ -25,28 +25,26 @@
         <span th:text="${errorMessage}"></span>
     </div>
 
+    <!-- Link to view wishlists -->
     <div class="view-link">
         <a th:href="@{/wishlist/wishlists}" style=" font-weight: bold; color: cornflowerblue;">View all Wishlists</a>
     </div>
     <br>
-    <div class="container">
-        <form id="wishlistForm" th:action="@{/wishlist/save}" th:object="${itemlist}" method="post">
-            <div class="form-group">
-                <label for="name">Wishlist Name:</label>
-                <input type="text" th:field="*{listName}" id="name" class="form-control">
-                <br>
-                <button type="submit" class="btn btn-primary">Create List!</button>
-                <a href="/" class="btn btn-secondary">Cancel</a>
-            </div>
-        </form>
+<!-- Form to create a new wishlist -->
+ <form th:action="@{/wishlist/save}" th:object="${itemlist}" method="post">
+    <div class="form-group">
+        <label for="name">Wishlist Name:</label>
+        <input type="text" th:field="*{listName}" id="name" class="form-control">
+        <br>
     </div>
+ </form>
 </div>
-</body>
+
 <footer>
     <p>Contact Information:</p>
     <p>E-mail: support@Wishlist.com</p>
     <p>Tlf (Random). nr.: +45 45 16 18 67</p>
     <p>Management: Almer Toro Coskun & Kodjo Nicklas Akator </p>
 </footer>
-
+</body>
 </html>
