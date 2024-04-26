@@ -3,24 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <title>Add a Custom Item to the Wishlist</title>
+    <link rel="stylesheet" th:href="@{/create_styles.css}" /> <!-- Link til din nye CSS-fil -->
 </head>
 <body>
-<!-- Add Item Form -->
-<h2>Add an item to <span th:text="${itemList.listName}"></span></h2>
+<header>
+    <h1>True Dreams</h1>
+    <p style="font-size: 1.0em; color: white; font-family: 'Lucida Calligraphy',serif;  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); margin-left: 12px;">Making Dreams Come True</p>
+</header>
 
-<form method="post" th:action="@{'/wishlist/' + ${itemList.idItemList} + '/addItem'}" th:object="${item}" >
-    <div class="form-group">
-        <label for="itemName">Item Name:</label>
-        <input type="text" th:field="*{itemName}" id="itemName">
-        <br>
-        <label for="itemDescription">Item Description:</label>
-        <textarea th:field="*{itemDescription}" id="itemDescription"></textarea>
-        <br>
-        <label for="itemPrice">Item Price:</label>
-        <input type="text" th:field="*{itemPrice}" id="itemPrice">
+<div class="container">
+    <h1>Add an item to <span th:text="${itemList.listName}"></span></h1>
+
+    <!-- Success Message -->
+    <div th:if="${successMessage}" class="alert alert-success" role="alert">
+        <span th:text="${successMessage}"></span>
     </div>
-    <button type="submit">Add Item!</button>
-    <a href="/" class="btn btn-secondary">Cancel</a>
-</form>
+
+    <!-- Error Message -->
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+        <span th:text="${errorMessage}"></span>
+    </div>
+
+    <!-- Link to view wishlists -->
+    <div class="view-link">
+        <a th:href="@{/wishlist/wishlists}" style=" font-weight: bold; color: cornflowerblue;">View all Wishlists</a>
+    </div>
+    <br>
+
+    <!-- Form to add a new item -->
+    <form method="post" th:action="@{'/wishlist/' + ${itemList.idItemList} + '/addItem'}" th:object="${item}">
+        <div class="form-group">
+            <label for="itemName">Item Name:</label>
+            <input type="text" th:field="*{itemName}" id="itemName" class="form-control">
+        </div>
+        <div class="form-group">
+            <br>
+            <label for="itemDescription">Item Description:</label>
+            <textarea th:field="*{itemDescription}" id="itemDescription" class="form-control"></textarea>
+        </div>
+        <div class="form-group">
+            <br>
+            <label for="itemPrice">Item Price:</label>
+            <input type="text" th:field="*{itemPrice}" id="itemPrice" class="form-control">
+        </div>
+        <br>
+        <button type="submit" class="btn btn-success">Add Item!</button> <br>
+        <br>
+        <a href="/" class="btn btn-secondary" style="text-align: center">Cancel</a>
+
+    </form>
+</div>
+
+<footer>
+    <p>Contact Information:</p>
+    <p>E-mail: support@Wishlist.com</p>
+    <p>Tlf (Random). nr.: +45 45 16 18 67</p>
+    <p>Management: Almer Toro Coskun & Kodjo Nicklas Akator </p>
+</footer>
+
 </body>
 </html>
